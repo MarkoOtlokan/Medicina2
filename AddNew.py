@@ -10,6 +10,7 @@ from MedicalExamination import MedicalExamination
 import pydicom
 import pydicom_PIL
 from PIL import Image, ImageTk
+from datetime import date
 
 
 
@@ -323,9 +324,26 @@ class Calendar:
 		self.wid.append(sel)
 		sel.grid(row=8, column=0, columnspan=7)
 
-		ok = tkinter.Button(self.parent, width=5, text='OK', command=self.kill_and_save)
+		ok = tkinter.Button(self.parent, width=5, text='OK', command=self.check)
 		self.wid.append(ok)
 		ok.grid(row=9, column=2, columnspan=3, pady=10)
+
+	def check(self):
+		print(self.values)
+		today = date.today()
+		print(today)
+		if(today.year < int(self.values['year_selected'])):
+			messagebox.showinfo("Greska", "Mora biti bar danasnji datum")
+			return
+		if(today.year == int(self.values['year_selected'])):
+			if(today.month < int(self.values['month_selected'])):
+				messagebox.showinfo("Greska", "Mora biti bar danasnji datum")
+				return
+			if(today.month == int(self.values['month_selected'])):
+				if(today.day < int(self.values['day_selected'])):
+					messagebox.showinfo("Greska", "Mora biti bar danasnji datum")
+					return
+		self.kill_and_save()
 
 	def kill_and_save(self):
 		self.otac.setDate(self.selfP,self.values)

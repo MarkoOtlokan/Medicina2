@@ -325,11 +325,11 @@ class Calendar:
 		self.wid.append(sel)
 		sel.grid(row=8, column=0, columnspan=7)
 
-		ok = tkinter.Button(self.parent, width=5, text='OK', command=self.check)
-		self.wid.append(ok)
+		ok = tkinter.Button(self.parent, width=5, text='OK', command=self.check)# i ovde postoji izmena command=self.check
+		self.wid.append(ok)															# takodje treba da se from datetime import date
 		ok.grid(row=9, column=2, columnspan=3, pady=10)
 
-	def check(self):
+	def check(self): ############## novi deo koda $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 		print(self.values)
 		today = date.today()
 		print(today)
@@ -681,6 +681,7 @@ class Dicom(tkinter.Frame):
 		self.__dataset.StudyID= self.id_entry.get()
 		self.__dataset.StudyDate = self.date2_entry.get()
 		self.__dataset.PatientID = self.lbo_entry.get()
+		self.__dataset.Modality = self.var.get()
 
 
 		self.__dataset.save_as(self.path) # čuvanje dataset-a; ako ne postoji, biće kreiran
@@ -802,6 +803,22 @@ class Dicom(tkinter.Frame):
 			self.__sdate.set(False)
 			self.izsistemaDatum.configure(state = tkinter.DISABLED)
 			self.date2_entry.config(state = "disabled")
+
+		if "Modality" in self.__dataset: # da li podatak postoji u dataset-u
+			#self.__sdate.set(True) # podatak pronađen?
+			if self.med:
+				if self.med.type == self.__dataset.Modality:
+					self.opt.set(3)
+					self.option.config(state = "disabled")
+				else:
+					self.opt.set(2)
+			else:
+				self.opt.set(2)
+			self.var.set(self.__dataset.Modality)
+		else:
+			self.__sdate.set(False)
+			self.izsistemaDatum.configure(state = tkinter.DISABLED)
+			self.option.config(state = "disabled")
 
 
 

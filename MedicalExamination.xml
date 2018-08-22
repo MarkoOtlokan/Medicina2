@@ -48,4 +48,12 @@
     <doctor>pocek</doctor>
     <dicom>./DICOM samples/CT-Abdomen.dcm</dicom>
   </MedicalExamination>
+  <MedicalExamination id="2564019950">
+    <patient_LBO>11111111111</patient_LBO>
+    <date>2018-08-01</date>
+    <type>XA</type>
+    <report>uredu</report>
+    <doctor>pocek</doctor>
+    <dicom>./DICOM samples/CT-Abdomen.dcm</dicom>
+  </MedicalExamination>
 </MedicalExamination>

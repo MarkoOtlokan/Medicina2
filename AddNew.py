@@ -102,11 +102,12 @@ class AddNew(tkinter.Frame):
 
 class DodajPregled(tkinter.Frame):
 
-	def __init__(self, parent,otac, patientKey, first, second): #first i second sluze samo da bi se vratio na prosli nivo
+	def __init__(self, parent,otac, patient, first, second): #first i second sluze samo da bi se vratio na prosli nivo
 		self.route = ""
 		self.first = first
 		self.second = second
-		self.patientKey = patientKey
+		self.patient = patient
+		self.patientKey = self.patient.LBO
 		self.otac = otac
 		self.data = {}
 		self.parent = parent
@@ -191,7 +192,7 @@ class DodajPregled(tkinter.Frame):
 
 	def otvori(self):
 		child = tkinter.Toplevel()
-		dic = Dicom(child,self.otac,self.dicom_entry.get())
+		dic = Dicom(child,self.otac,self.dicom_entry.get(),self.patient)
 
 	def otvoriDicom(self):
 
@@ -353,7 +354,9 @@ class Calendar:
 
 class Dicom(tkinter.Frame):
 
-	def __init__(self, parent, otac, path):
+	def __init__(self, parent, otac, path, patient, med = False):
+		self.med = med
+		self.patient = patient
 		self.parent = parent
 		self.otac = otac
 		self.path = path
@@ -392,7 +395,7 @@ class Dicom(tkinter.Frame):
 	def initialize_insert_interface(self):
 
 
-
+		print(self.patient.name)
 		self.__starostPrisutna = tkinter.BooleanVar(False)
 		self.__starost = tkinter.IntVar()
 		self.__starostJedinica = tkinter.StringVar()
@@ -605,12 +608,12 @@ class Dicom(tkinter.Frame):
 		    if date[0]=='':
 		        return ('')
 
-		    newDate = date[2]+'.'+ date[1]+ '.' + date[0]
+		    newDate = date[2]+'-'+ date[1]+ '-' + date[0]
 		    return(newDate)
 		except:
 		    try:
 
-		        newDate = date[0][6:8]+'.'+ date[0][4:6]+ '.' + date[0][0:4]
+		        newDate = date[0][6:8]+'-'+ date[0][4:6]+ '-' + date[0][0:4]
 		        return (newDate)
 		    except:
 
@@ -694,67 +697,112 @@ class Dicom(tkinter.Frame):
 			# podaci DICOM datoteke ne moraju da postoje
 		if "PatientName" in self.__dataset: # da li podatak postoji u dataset-u
 			self.__pacijentPrisutan.set(True) # podatak pronađen?
+			if(str(self.patient.name+" "+self.patient.surname) == self.__dataset.PatientName):
+				#self.nameVar.set(self.__dataset.PatientName)
+				self.name.set(3)
+				self.name_entry.config(state = "disabled")
+			else:
+				self.name.set(2)
 			self.nameVar.set(self.__dataset.PatientName)
-			self.name.set(3)
 
 		else:
 			self.__pacijentPrisutan.set(False)
 			self.izsistemaIme.configure(state = tkinter.DISABLED)
-		self.name_entry.config(state = "disabled")
-
-		if "PatientBirthDate" in self.__dataset:
-			self.__pbd.set(True)
-			self.pbd.set(self.dtod(self.__dataset.PatientBirthDate))
-			self.d.set(3)
-		else:
-			self.__pbd.set(False)
-			self.izsistemaDatum1.configure(state = tkinter.DISABLED)
-		self.date_entry.config(state = "disabled")
-
-		if "StudyDescription" in self.__dataset: # da li podatak postoji u dataset-u
-			self.__sd.set(True) # podatak pronađen?
-			self.sd.set(self.__dataset.StudyDescription)
-			self.opt.set(3)
-		else:
-			self.__sd.set(False)
-			self.izsistemaReport.configure(state = tkinter.DISABLED)
-		self.report_entry.config(state = "disabled")
-
-		if "ReferringPhysicianName" in self.__dataset: # da li podatak postoji u dataset-u
-			self.__rp.set(True) # podatak pronađen?
-			self.rp.set(self.__dataset.ReferringPhysicianName)
-			self.doc.set(3)
-		else:
-			self.__rp.set(False)
-			self.izsistemaDoctor.configure(state = tkinter.DISABLED)
-		self.doctor_entry.config(state = "disabled")
-
-		if "StudyID" in self.__dataset: # da li podatak postoji u dataset-u
-			self.__si.set(True) # podatak pronađen?
-			self.si.set(self.__dataset.StudyID)
-			self.id.set(3)
-		else:
-			self.__rp.set(False)
-			self.izsistemaid.configure(state = tkinter.DISABLED)
-		self.id_entry.config(state = "disabled")
-
-		if "StudyDate" in self.__dataset: # da li podatak postoji u dataset-u
-			self.__sdate.set(True) # podatak pronađen?
-			self.sdate.set(self.dtod(self.__dataset.StudyDate))
-			self.dt.set(3)
-		else:
-			self.__sdate.set(False)
-			self.izsistemaDatum.configure(state = tkinter.DISABLED)
-		self.date2_entry.config(state = "disabled")
+			self.name_entry.config(state = "disabled")
 
 		if "PatientID" in self.__dataset: # da li podatak postoji u dataset-u
 			self.__pi.set(True) # podatak pronađen?
+			if self.patient.LBO == self.__dataset.PatientID:
+				self.lbo.set(3)
+				self.lbo_entry.config(state = "disabled")
+			else:
+				self.lbo.set(2)
 			self.pi.set(self.__dataset.PatientID)
-			self.lbo.set(3)
 		else:
 			self.__pi.set(False)
 			self.izsistemaLbo.configure(state = tkinter.DISABLED)
-		self.lbo_entry.config(state = "disabled")
+			self.lbo_entry.config(state = "disabled")
+
+		if "PatientBirthDate" in self.__dataset:
+			self.__pbd.set(True)
+			if(self.patient.date_of_birth == self.__dataset.PatientBirthDate):
+				#self.pbd.set(self.dtod(self.__dataset.PatientBirthDate))
+				self.d.set(3)
+				self.date_entry.config(state = "disabled")
+			else:
+				self.d.set(2)
+			self.pbd.set(self.dtod(self.__dataset.PatientBirthDate))
+		else:
+			self.__pbd.set(False)
+			self.izsistemaDatum1.configure(state = tkinter.DISABLED)
+			self.date_entry.config(state = "disabled")
+
+		if "StudyDescription" in self.__dataset: # da li podatak postoji u dataset-u
+			self.__sd.set(True) # podatak pronađen?
+			if self.med:
+				if self.med.report == self.__dataset.StudyDescription:
+					self.report.set(3)
+					self.report_entry.config(state = "disabled")
+				else:
+					self.report.set(2)
+			else:
+				self.report.set(2)
+			self.sd.set(self.__dataset.StudyDescription)
+		else:
+			print("nisam ga pronasao")
+			self.__sd.set(False)
+			self.izsistemaReport.configure(state = tkinter.DISABLED)
+			self.report_entry.config(state = "disabled")
+
+		if "ReferringPhysicianName" in self.__dataset: # da li podatak postoji u dataset-u
+			self.__rp.set(True) # podatak pronađen?
+			if self.med:
+				if self.med.doctor == self.__dataset.ReferringPhysicianName:
+					self.doc.set(3)
+					self.doctor_entry.config(state = "disabled")
+				else:
+					self.doc.set(2)
+			else:
+				self.doc.set(2)
+			self.rp.set(self.__dataset.ReferringPhysicianName)
+		else:
+			self.__rp.set(False)
+			self.izsistemaDoctor.configure(state = tkinter.DISABLED)
+			self.doctor_entry.config(state = "disabled")
+
+		if "StudyID" in self.__dataset: # da li podatak postoji u dataset-u
+			self.__si.set(True) # podatak pronađen?
+			if self.med:
+				if self.med.id == self.__dataset.StudyID:
+					self.id.set(3)
+					self.id_entry.config(state = "disabled")
+				else:
+					self.id.set(2)
+			else:
+				self.id.set(2)
+
+			self.si.set(self.__dataset.StudyID)
+		else:
+			self.__rp.set(False)
+			self.izsistemaid.configure(state = tkinter.DISABLED)
+			self.id_entry.config(state = "disabled")
+
+		if "StudyDate" in self.__dataset: # da li podatak postoji u dataset-u
+			self.__sdate.set(True) # podatak pronađen?
+			if self.med:
+				if self.med.date == self.dtod(self.__dataset.StudyDate):
+					self.dt.set(3)
+					self.date2_entry.config(state = "disabled")
+				else:
+					self.dt.set(2)
+			else:
+				self.dt.set(2)
+			self.sdate.set(self.dtod(self.__dataset.StudyDate))
+		else:
+			self.__sdate.set(False)
+			self.izsistemaDatum.configure(state = tkinter.DISABLED)
+			self.date2_entry.config(state = "disabled")
+
 
 
 		pilSlika = pydicom_PIL.get_PIL_image(self.__dataset) # pokušaj dekompresije i čitanja slike iz dataset objekta

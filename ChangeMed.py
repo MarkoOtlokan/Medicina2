@@ -5,6 +5,7 @@ from MedicalExamination import MedicalExamination
 from tkinter import filedialog
 import calendar
 import datetime
+from AddNew import Dicom
 
 
 class ChangeMed(tkinter.Frame):
@@ -15,6 +16,7 @@ class ChangeMed(tkinter.Frame):
         self.pat = pat
         self.otac = otac
         self.parent=parent
+        self.patient = pat
         self.frame = tkinter.Frame(self.parent)
         self.initialize_insert_interface()
 
@@ -69,6 +71,8 @@ class ChangeMed(tkinter.Frame):
         self.dicom_entry.grid(row = 6, column = 2)
         self.odabirSnimka = tkinter.Button(self.parent,text = '...', width = 5, command = self.klikNaodabir_snimkaDugme)
         self.odabirSnimka.grid(row = 6, column = 3)
+        self.goDic_button = tkinter.Button(self.parent, text = "Otvori", command = self.otvori, state=tkinter.DISABLED)
+        self.goDic_button.grid(row = 6, column = 4, sticky = tkinter.W)
 
 
         self.submit_button = tkinter.Button(self.parent, text = "Potvrdi", command = self.check)
@@ -94,7 +98,13 @@ class ChangeMed(tkinter.Frame):
         except:
             return
         self.route = stazaDoDatoteke
+        self.dicom_entry.delete(0, tkinter.END)
         self.dicom_entry.insert(tkinter.END,self.route)
+        self.goDic_button.configure(state=tkinter.NORMAL)
+
+    def otvori(self):
+        child = tkinter.Toplevel()
+        dic = Dicom(child,self.otac,self.dicom_entry.get(),self.patient, self.med)
 
     def check(self):
         tmpDate = self.date

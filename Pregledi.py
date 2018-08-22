@@ -56,7 +56,7 @@ class Pregledi(tkinter.Frame):
 	def addExamination(self):
 		self.parent.withdraw()
 		self.newWindow = tkinter.Toplevel(self.parent)
-		bb = DodajPregled(self.newWindow, Pregledi,self.patient.LBO,self.otac,self.patient)
+		bb = DodajPregled(self.newWindow, Pregledi,self.patient,self.otac,self.patient)
 
 	def writeMedicalExamination(self,LBO):
 		self.medL = MedicalExamination.readXML()
@@ -94,7 +94,7 @@ class Pregledi(tkinter.Frame):
 
 	def goToDicom(self, path):
 		self.newWindow = tkinter.Toplevel(self.parent)
-		bb = Dicom(self.newWindow, Pregledi, path)
+		bb = Dicom(self.newWindow, Pregledi, path, self.patient)
 
 	def dMed(self,id):
 		self.win = tkinter.Toplevel()

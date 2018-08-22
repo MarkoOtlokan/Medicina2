@@ -24,4 +24,28 @@
     <doctor>doktor</doctor>
     <dicom>./DICOM samples/US-Epicard.dcm</dicom>
   </MedicalExamination>
+  <MedicalExamination id="4263459495">
+    <patient_LBO>11111111111</patient_LBO>
+    <date>2018-08-01</date>
+    <type>CT</type>
+    <report>asdfas</report>
+    <doctor>sdafaf</doctor>
+    <dicom>./DICOM samples/CT-Ankle.dcm</dicom>
+  </MedicalExamination>
+  <MedicalExamination id="1196300808">
+    <patient_LBO>11111111111</patient_LBO>
+    <date>2018-08-01</date>
+    <type>XA</type>
+    <report>nema</report>
+    <doctor>pocek</doctor>
+    <dicom>./DICOM samples/CT-Abdomen.dcm</dicom>
+  </MedicalExamination>
+  <MedicalExamination id="1904359962">
+    <patient_LBO>11111111111</patient_LBO>
+    <date>2018-08-01</date>
+    <type>CT</type>
+    <report>dobar</report>
+    <doctor>pocek</doctor>
+    <dicom>./DICOM samples/CT-Abdomen.dcm</dicom>
+  </MedicalExamination>
 </MedicalExamination>

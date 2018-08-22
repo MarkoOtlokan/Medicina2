@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="MedicalExamination">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="MedicalExamination" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+              <xs:element name="patient_LBO">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="date">
+								<xs:simpleType>
+									<xs:restriction base="xs:date">
+										<xs:minInclusive value="1900-01-01"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="type">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="CT"/>
+										<xs:enumeration value="MR"/>
+										<xs:enumeration value="ECG"/>
+										<xs:enumeration value="XA"/>
+										<xs:enumeration value="US"/>
+										<xs:enumeration value="RF"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="report">
+								<xs:simpleType>
+                  <xs:restriction base="xs:string">
+										<xs:minLength value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+              <xs:element name="doctor">
+								<xs:simpleType>
+                  <xs:restriction base="xs:string">
+										<xs:minLength value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="dicom">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="id" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:decimal">
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

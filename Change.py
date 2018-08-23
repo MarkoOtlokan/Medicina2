@@ -4,6 +4,7 @@ import tkinter
 from Patient import Patient
 import calendar
 import datetime
+from datetime import date
 
 class Change(tkinter.Frame):
 
@@ -20,40 +21,40 @@ class Change(tkinter.Frame):
                 self.parent.grid_rowconfigure(0,weight=1)
                 self.parent.grid_columnconfigure(0,weight=1)
                 self.parent.config(background="lavender")
-                
-                
+
+
                 self.Current_label = tkinter.Label(self.parent, text = "Trenutne vrednosti:")
                 self.Current_label.grid(row = 1, column = 1, sticky = tkinter.W)
-                
+
                 self.New_label = tkinter.Label(self.parent, text = "Nove/izmenjene vrednosti:")
                 self.New_label.grid(row = 1, column = 2, sticky = tkinter.W)
-                
+
                 self.LBO_label = tkinter.Label(self.parent, text = self.patient.LBO)
                 self.LBO_podaci = tkinter.Label(self.parent, text = "LBO:")
                 self.LBO_podaci.grid(row = 2, column = 0, sticky = tkinter.W)
                 self.LBO_label.grid(row = 2, column = 1, sticky = tkinter.W)
-                
+
                 self.name_label = tkinter.Label(self.parent, text = self.patient.name)
                 self.name_entry = tkinter.Entry(self.parent)
                 self.name_podaci = tkinter.Label(self.parent, text = "Ime:")
                 self.name_podaci.grid(row = 3, column = 0, sticky = tkinter.W)
                 self.name_label.grid(row = 3, column = 1, sticky = tkinter.W)
                 self.name_entry.grid(row = 3, column = 2)
-                
+
                 self.surname_label = tkinter.Label(self.parent, text = self.patient.surname)
                 self.surname_entry = tkinter.Entry(self.parent)
                 self.surname_podaci = tkinter.Label(self.parent, text = "Prezime:")
                 self.surname_podaci.grid(row = 4, column = 0, sticky = tkinter.W)
                 self.surname_label.grid(row = 4, column = 1, sticky = tkinter.W)
                 self.surname_entry.grid(row = 4, column = 2)
-                
+
                 self.date_of_birth_label = tkinter.Label(self.parent, text = self.patient.date_of_birth)
                 self.date_of_birth_podaci = tkinter.Label(self.parent, text = "Datum rodjenja:")
                 self.date_of_birth_podaci.grid(row = 5, column = 0, sticky = tkinter.W)
                 self.date_of_birth_label.grid(row = 5, column = 1, sticky = tkinter.W)
                 self.date_Button = ttk.Button(self.parent, text='Izaberi',command=self.calCal)
                 self.date_Button.grid(row = 5, column = 3)
-                
+
                 self.submit_button = tkinter.Button(self.parent, text = "Potvrdi", command = self.check)
                 self.submit_button.grid(row = 3, column = 4, sticky = tkinter.W)
                 self.exit_button = tkinter.Button(self.parent, text = "Nazad", command = self.goBack)
@@ -62,14 +63,19 @@ class Change(tkinter.Frame):
         def check(self):
                 tmpName = self.name_entry.get()
                 tmpSurname = self.surname_entry.get()
-                tmpDate_of_birth = self.date
+                try :
+                    self.date
+                    print("1")
+                    tmpDate_of_birth = self.date.cget("text")
+                except:
+                    print("2")
+                    tmpDate_of_birth = self.patient.date_of_birth
                 print(tmpName,tmpSurname,tmpDate_of_birth)
                 if not tmpName:
                         tmpName = self.patient.name
                 if not tmpSurname:
                         tmpSurname = self.patient.surname
-                if not tmpDate_of_birth:
-                        tmpDate_of_birth = self.patient.date_of_birth
+
                 patiente = Patient.xmlToList()
                 del patiente[int(self.patient.LBO)]
                 Patient.saveXML(patiente)
@@ -92,7 +98,7 @@ class Change(tkinter.Frame):
         def setDate(self,data):
                 self.data = data
                 self.fillDate()
-        
+
 
         def goBack(self):
                 self.parent.withdraw()
@@ -193,9 +199,26 @@ class Calendar:
 		self.wid.append(sel)
 		sel.grid(row=8, column=0, columnspan=7)
 
-		ok = tkinter.Button(self.parent, width=5, text='OK', command=self.kill_and_save)
-		self.wid.append(ok)
+		ok = tkinter.Button(self.parent, width=5, text='OK', command=self.check)# i ovde postoji izmena command=self.check
+		self.wid.append(ok)															# takodje treba da se from datetime import date
 		ok.grid(row=9, column=2, columnspan=3, pady=10)
+
+	def check(self): ############## novi deo koda $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+		print(self.values)
+		today = date.today()
+		print(today)
+		if(today.year < int(self.values['year_selected'])):
+			messagebox.showinfo("Greska", "Mora biti bar danasnji datum")
+			return
+		if(today.year == int(self.values['year_selected'])):
+			if(today.month < int(self.values['month_selected'])):
+				messagebox.showinfo("Greska", "Mora biti bar danasnji datum")
+				return
+			if(today.month == int(self.values['month_selected'])):
+				if(today.day < int(self.values['day_selected'])):
+					messagebox.showinfo("Greska", "Mora biti bar danasnji datum")
+					return
+		self.kill_and_save()
 
 	def kill_and_save(self):
 		self.otac.setDate(self.selfP,self.values)

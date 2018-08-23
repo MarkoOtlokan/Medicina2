@@ -1,28 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <patiente xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="patient.xsd">
-  <patient LBO="21837493827">
-    <name>Damir</name>
-    <surname>Mladjan</surname>
-    <date_of_birth>2018-08-01</date_of_birth>
-  </patient>
-  <patient LBO="23554864245">
-    <name>sacsfas</name>
-    <surname>fasrgae</surname>
-    <date_of_birth>2000-02-03</date_of_birth>
-  </patient>
-  <patient LBO="11111111111">
+  <patient LBO="88888888888">
     <name>Marko</name>
     <surname>Otlokan</surname>
-    <date_of_birth>2018-04-10</date_of_birth>
-  </patient>
-  <patient LBO="10293019293">
-    <name>nonina</name>
-    <surname>ime</surname>
-    <date_of_birth>2018-05-08</date_of_birth>
-  </patient>
-  <patient LBO="12356984526">
-    <name>kdjlakjdja</name>
-    <surname>ncajndjn</surname>
-    <date_of_birth>2017-01-10</date_of_birth>
+    <date_of_birth>2018-08-11</date_of_birth>
   </patient>
 </patiente>

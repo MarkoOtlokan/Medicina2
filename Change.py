@@ -65,10 +65,8 @@ class Change(tkinter.Frame):
                 tmpSurname = self.surname_entry.get()
                 try :
                     self.date
-                    print("1")
                     tmpDate_of_birth = self.date.cget("text")
                 except:
-                    print("2")
                     tmpDate_of_birth = self.patient.date_of_birth
                 print(tmpName,tmpSurname,tmpDate_of_birth)
                 if not tmpName:

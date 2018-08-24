@@ -56,4 +56,12 @@
     <doctor>pocek</doctor>
     <dicom>./DICOM samples/CT-Abdomen.dcm</dicom>
   </MedicalExamination>
+  <MedicalExamination id="2634282384">
+    <patient_LBO>88888888888</patient_LBO>
+    <date>2018-08-02</date>
+    <type>MR</type>
+    <report>CCQ</report>
+    <doctor>DDH</doctor>
+    <dicom>./DICOM samples/US-Epicard.dcm</dicom>
+  </MedicalExamination>
 </MedicalExamination>

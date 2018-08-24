@@ -565,7 +565,7 @@ class Dicom(tkinter.Frame):
 
 	def sistemdate(self):
 		self.date_entry.config(state = "disabled")
-		self.pbd.set(self.dtod(self.__dataset.PatientBirthDate))
+		self.pbd.set(self.__dataset.PatientBirthDate)
 
 	def rucnoid(self):
 		self.si.set("")
@@ -581,7 +581,7 @@ class Dicom(tkinter.Frame):
 
 	def sistemDatum2(self):
 		self.date2_entry.config(state = "disabled")
-		self.sdate.set(self.dtod(self.__dataset.StudyDate))
+		self.sdate.set(self.__dataset.StudyDate)
 
 	def rucnoreport(self):
 		self.sd.set("")
@@ -601,24 +601,6 @@ class Dicom(tkinter.Frame):
 
 	def datum(self):
 		print("uspeo")
-
-	def dtod(self, date):
-		try:
-		    date = date.split('.')
-		    if date[0]=='':
-		        return ('')
-
-		    newDate = date[2]+'-'+ date[1]+ '-' + date[0]
-		    return(newDate)
-		except:
-		    try:
-
-		        newDate = date[0][6:8]+'-'+ date[0][4:6]+ '-' + date[0][0:4]
-		        return (newDate)
-		    except:
-
-		        return ('')
-
 
 
 	def fillDate(self):
@@ -732,7 +714,7 @@ class Dicom(tkinter.Frame):
 				self.date_entry.config(state = "disabled")
 			else:
 				self.d.set(2)
-			self.pbd.set(self.dtod(self.__dataset.PatientBirthDate))
+			self.pbd.set(self.__dataset.PatientBirthDate)
 		else:
 			self.__pbd.set(False)
 			self.izsistemaDatum1.configure(state = tkinter.DISABLED)
@@ -791,14 +773,14 @@ class Dicom(tkinter.Frame):
 		if "StudyDate" in self.__dataset: # da li podatak postoji u dataset-u
 			self.__sdate.set(True) # podatak pronađen?
 			if self.med:
-				if self.med.date == self.dtod(self.__dataset.StudyDate):
+				if self.med.date == self.__dataset.StudyDate:
 					self.dt.set(3)
 					self.date2_entry.config(state = "disabled")
 				else:
 					self.dt.set(2)
 			else:
 				self.dt.set(2)
-			self.sdate.set(self.dtod(self.__dataset.StudyDate))
+			self.sdate.set(self.__dataset.StudyDate)
 		else:
 			self.__sdate.set(False)
 			self.izsistemaDatum.configure(state = tkinter.DISABLED)

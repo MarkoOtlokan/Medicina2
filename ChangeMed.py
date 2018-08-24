@@ -107,12 +107,15 @@ class ChangeMed(tkinter.Frame):
         dic = Dicom(child,self.otac,self.dicom_entry.get(),self.patient, self.med)
 
     def check(self):
-        tmpDate = self.date
+    #    tmpDate = self.date
         tmpDoctor = self.doctor_entry.get()
         tmpReport = self.report_entry.get()
         tmpDicom = self.dicom_entry.get()
         tmpType = self.var.get()
-        if not tmpDate:
+        try :
+            self.date
+            tmpDate = self.date.cget("text")
+        except:
             tmpDate = self.med.date
         if not tmpDoctor:
             tmpDoctor = self.med.doctor

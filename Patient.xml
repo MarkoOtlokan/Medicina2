@@ -5,4 +5,9 @@
     <surname>Otlokan</surname>
     <date_of_birth>2018-08-02</date_of_birth>
   </patient>
+  <patient LBO="12322222222">
+    <name>sadfasdf</name>
+    <surname>asdfasdfas</surname>
+    <date_of_birth>2018-08-14</date_of_birth>
+  </patient>
 </patiente>

@@ -219,7 +219,7 @@ class DodajPregled(tkinter.Frame):
 
 	def calCal(self):
 		child = tkinter.Toplevel()
-		cal = Calendar(child, self.data)
+		cal = Calendar(child, DodajPregled,self)
 
 	def otvori(self):
 		child = tkinter.Toplevel()

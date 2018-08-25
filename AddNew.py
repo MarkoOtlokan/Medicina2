@@ -233,7 +233,8 @@ class DodajPregled(tkinter.Frame):
 
 
 class Calendar:
-	def __init__(self, parent,otac,selfP):
+	def __init__(self, parent,otac,selfP, dic = 0):
+		self.dic = dic
 		self.values = {}
 		self.selfP = selfP
 		self.parent = parent
@@ -347,7 +348,12 @@ class Calendar:
 		self.kill_and_save()
 
 	def kill_and_save(self):
-		self.otac.setDate(self.selfP,self.values)
+		if self.dic == 0:
+			self.otac.setDate(self.selfP,self.values)
+		if self.dic == 1:
+			self.otac.setDate1(self.selfP,self.values)
+		if self.dic == 2:
+			self.otac.setDate2(self.selfP,self.values)
 		self.parent.destroy()
 
 
@@ -455,11 +461,14 @@ class Dicom(tkinter.Frame):
 
 		self.dateEntry = tkinter.StringVar()
 		self.dateEntry.set("")
-		self.date_Label = tkinter.Label(self.frame3, text = "Datum rodjenja : ").pack(side = tkinter.LEFT)
-		self.date_entry = tkinter.Entry(self.frame3,textvariable = self.pbd)
-		self.date_entry.pack(side = tkinter.LEFT)
+		self.date_Label = tkinter.Label(self.frame3, text = "Datum rodjenja : ").pack(side = tkinter.LEFT)#pbd
+		self.date = tkinter.Label(self.frame3, text="                  ")
+		self.date.pack(side = tkinter.LEFT)
+		self.date_Button = tkinter.Button(self.frame3, text='Izaberi',command=self.calCal1)
+		self.date_Button.pack(side = tkinter.LEFT)
 		self.izostaviDatum1 = tkinter.Radiobutton(self.frame3, text = "izostavi", variable = self.d, value=1, command = self.rucnodate).pack(side = tkinter.LEFT)
-		self.rucnoDatum1 = tkinter.Radiobutton(self.frame3, text="rucno", padx = 10, variable = self.d, value=2,command = lambda: self.date_entry.config(state = "normal")).pack(side = tkinter.LEFT)
+		self.rucnoDatum1 = tkinter.Radiobutton(self.frame3, text="rucno", padx = 10, variable = self.d, value=2, command = self.date1rucno)
+		self.rucnoDatum1.pack(side = tkinter.LEFT)
 		self.izsistemaDatum1 = tkinter.Radiobutton(self.frame3, text="iz sistema", padx = 10, variable = self.d, value=3,command = self.sistemdate)
 		self.izsistemaDatum1.pack(side = tkinter.LEFT)
 
@@ -495,13 +504,15 @@ class Dicom(tkinter.Frame):
 		self.framesec3.pack(side = tkinter.TOP, fill = tkinter.X, pady = 10)
 
 		self.date2_Label = tkinter.Label(self.framesec3, text = "datum : ").pack(side = tkinter.LEFT)
-		self.date2_entry = tkinter.Entry(self.framesec3,textvariable = self.sdate)
-		self.date2_entry.pack(side = tkinter.LEFT)
+		self.date2 = tkinter.Label(self.framesec3, text="                  ")
+		self.date2.pack(side = tkinter.LEFT)
+		self.date2_Button = tkinter.Button(self.framesec3, text='Izaberi',command=self.calCal2)
+		self.date2_Button.pack(side = tkinter.LEFT)
 
 
 
 		self.izostaviDatum = tkinter.Radiobutton(self.framesec3, text = "izostavi", variable = self.dt, value=1, command = self.rucnoDate2).pack(side = tkinter.LEFT)
-		self.rucnoDatum = tkinter.Radiobutton(self.framesec3, text="rucno", padx = 10, variable = self.dt, command = lambda: self.date2_entry.config(state = "normal"), value=2).pack(side = tkinter.LEFT)
+		self.rucnoDatum = tkinter.Radiobutton(self.framesec3, text="rucno", padx = 10, variable = self.dt, command = self.date2rucno, value=2).pack(side = tkinter.LEFT)
 		self.izsistemaDatum = tkinter.Radiobutton(self.framesec3, text="iz sistema", padx = 10, variable = self.dt, command = self.sistemDatum2, value=3)
 		self.izsistemaDatum.pack(side = tkinter.LEFT)
 
@@ -542,6 +553,11 @@ class Dicom(tkinter.Frame):
 		self.izsistemaDoctor.pack(side = tkinter.LEFT)
 
 		self.klikNaOtvoriDugme()
+	def date1rucno(self):
+		self.date['text'] = "                  "
+
+	def date2rucno(self):
+		self.date2['text'] = "                  "
 
 	def rucnoname(self):
 		self.nameVar.set("")
@@ -553,19 +569,18 @@ class Dicom(tkinter.Frame):
 
 	def rucnolbo(self):
 		self.sdate.set("")
-		self.date2_entry.config(state = "disabled")
+		#self.date2_entry.config(state = "disabled")
 
 	def sistemlbo(self):
 		self.lbo_entry.config(state = "disabled")
 		self.pi.set(self.__dataset.PatientID)
 
 	def rucnodate(self):
-		self.pbd.set("")
-		self.date_entry.config(state = "disabled")
+		self.date['text'] = "                  "
+
 
 	def sistemdate(self):
-		self.date_entry.config(state = "disabled")
-		self.pbd.set(self.__dataset.PatientBirthDate)
+		self.date['text'] = self.__dataset.PatientBirthDate
 
 	def rucnoid(self):
 		self.si.set("")
@@ -576,12 +591,10 @@ class Dicom(tkinter.Frame):
 		self.si.set(self.__dataset.StudyID)
 
 	def rucnoDate2(self):
-		self.sdate.set("")
-		self.date2_entry.config(state = "disabled")
+		self.date2['text'] = "                  "
 
 	def sistemDatum2(self):
-		self.date2_entry.config(state = "disabled")
-		self.sdate.set(self.__dataset.StudyDate)
+		self.date2['text'] = self.__dataset.PatientBirthDate
 
 	def rucnoreport(self):
 		self.sd.set("")
@@ -603,23 +616,19 @@ class Dicom(tkinter.Frame):
 		print("uspeo")
 
 
-	def fillDate(self):
 
-		if self.data == {}:
-			return
-		self.dateEntry.set(str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected']))
-
-	def setDate(self,data):
-		self.data = data
-		self.fillDate()
 
 	def ch(self):
 		self.goDic_button.configure(state=tkinter.NORMAL)
 
 
-	def calCal(self):
+	def calCal1(self):
 		child = tkinter.Toplevel()
-		cal = Calendar(child,Dicom,self)
+		cal = Calendar(child,Dicom,self,1)
+
+	def calCal2(self):
+		child = tkinter.Toplevel()
+		cal = Calendar(child,Dicom,self,2)
 
 	def goBack(self):
 		self.parent.destroy()
@@ -657,11 +666,11 @@ class Dicom(tkinter.Frame):
 
 
 		self.__dataset.PatientName = self.name_entry.get() # vrednost podatka
-		self.__dataset.PatientBirthDate = self.date_entry.get()
+		self.__dataset.PatientBirthDate = self.date.cget('text')
 		self.__dataset.StudyDescription = self.report_entry.get()
 		self.__dataset.ReferringPhysicianName = self.doctor_entry.get()
 		self.__dataset.StudyID= self.id_entry.get()
-		self.__dataset.StudyDate = self.date2_entry.get()
+		self.__dataset.StudyDate = self.date2.cget('text')
 		self.__dataset.PatientID = self.lbo_entry.get()
 		self.__dataset.Modality = self.var.get()
 
@@ -669,6 +678,19 @@ class Dicom(tkinter.Frame):
 		self.__dataset.save_as(self.path) # čuvanje dataset-a; ako ne postoji, biće kreiran
 		messagebox.showinfo("Uspeh", "Uspesno ste izmenili datoteku")
 		self.goBack()
+
+
+	def setDate1(self,data):
+		self.data = data
+		if self.data == {}:
+			return
+		self.date['text'] = str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected'])
+
+	def setDate2(self,data):
+		self.data = data
+		if self.data == {}:
+			return
+		self.date2['text'] = str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected'])
 
 
 	def klikNaOtvoriDugme(self):
@@ -711,14 +733,16 @@ class Dicom(tkinter.Frame):
 			if(self.patient.date_of_birth == self.__dataset.PatientBirthDate):
 				#self.pbd.set(self.dtod(self.__dataset.PatientBirthDate))
 				self.d.set(3)
-				self.date_entry.config(state = "disabled")
+			#	self.date_entry.config(state = "disabled")
 			else:
 				self.d.set(2)
-			self.pbd.set(self.__dataset.PatientBirthDate)
+
+			self.date['text'] = self.__dataset.PatientBirthDate
+
 		else:
 			self.__pbd.set(False)
 			self.izsistemaDatum1.configure(state = tkinter.DISABLED)
-			self.date_entry.config(state = "disabled")
+			#self.date_entry.config(state = "disabled")
 
 		if "StudyDescription" in self.__dataset: # da li podatak postoji u dataset-u
 			self.__sd.set(True) # podatak pronađen?
@@ -770,21 +794,35 @@ class Dicom(tkinter.Frame):
 			self.izsistemaid.configure(state = tkinter.DISABLED)
 			self.id_entry.config(state = "disabled")
 
+
+		if "PatientBirthDate" in self.__dataset:
+			self.__pbd.set(True)
+			if(self.patient.date_of_birth == self.__dataset.PatientBirthDate):
+				#self.pbd.set(self.dtod(self.__dataset.PatientBirthDate))
+				self.d.set(3)
+			#	self.date_entry.config(state = "disabled")
+			else:
+				self.d.set(2)
+
+			self.date['text'] = self.__dataset.PatientBirthDate
+
+		else:
+			self.__pbd.set(False)
+			self.izsistemaDatum1.configure(state = tkinter.DISABLED)
+
 		if "StudyDate" in self.__dataset: # da li podatak postoji u dataset-u
 			self.__sdate.set(True) # podatak pronađen?
 			if self.med:
 				if self.med.date == self.__dataset.StudyDate:
 					self.dt.set(3)
-					self.date2_entry.config(state = "disabled")
 				else:
 					self.dt.set(2)
 			else:
 				self.dt.set(2)
-			self.sdate.set(self.__dataset.StudyDate)
+			self.date2['text'] = self.__dataset.PatientBirthDate
 		else:
 			self.__sdate.set(False)
-			self.izsistemaDatum.configure(state = tkinter.DISABLED)
-			self.date2_entry.config(state = "disabled")
+			self.izsistemaDatum.configure(state = tkiter.DISABLED)
 
 		if "Modality" in self.__dataset: # da li podatak postoji u dataset-u
 			#self.__sdate.set(True) # podatak pronađen?

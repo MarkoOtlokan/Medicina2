@@ -8,100 +8,107 @@ from datetime import date
 
 class Change(tkinter.Frame):
 
-        def __init__(self, parent, otac, patient):
-                self.patient = patient
+    def __init__(self, parent, otac, patient):
+        self.parent=parent
+        self.patient = patient
 
-                self.otac = otac
-                self.parent=parent
-                self.frame = tkinter.Frame(self.parent)
-                self.initialize_insert_interface()
+        self.parent.withdraw()
+        self.parent.update_idletasks()  # Update "requested size" from geometry manager
+        x = (self.parent.winfo_screenwidth() - self.parent.winfo_reqwidth()) / 2
+        y = (self.parent.winfo_screenheight() - self.parent.winfo_reqheight()) / 2
+        self.parent.geometry("+%d+%d" % (x, y))
+        self.parent.deiconify()
 
-        def initialize_insert_interface(self):
-                self.parent.title("Canvas Test")
-                self.parent.grid_rowconfigure(0,weight=1)
-                self.parent.grid_columnconfigure(0,weight=1)
-                self.parent.config(background="lavender")
+        self.otac = otac
+        self.frame = tkinter.Frame(self.parent)
+        self.initialize_insert_interface()
 
-
-                self.Current_label = tkinter.Label(self.parent, text = "Trenutne vrednosti:")
-                self.Current_label.grid(row = 1, column = 1, sticky = tkinter.W)
-
-                self.New_label = tkinter.Label(self.parent, text = "Nove/izmenjene vrednosti:")
-                self.New_label.grid(row = 1, column = 2, sticky = tkinter.W)
-
-                self.LBO_label = tkinter.Label(self.parent, text = self.patient.LBO)
-                self.LBO_podaci = tkinter.Label(self.parent, text = "LBO:")
-                self.LBO_podaci.grid(row = 2, column = 0, sticky = tkinter.W)
-                self.LBO_label.grid(row = 2, column = 1, sticky = tkinter.W)
-
-                self.name_label = tkinter.Label(self.parent, text = self.patient.name)
-                self.name_entry = tkinter.Entry(self.parent)
-                self.name_podaci = tkinter.Label(self.parent, text = "Ime:")
-                self.name_podaci.grid(row = 3, column = 0, sticky = tkinter.W)
-                self.name_label.grid(row = 3, column = 1, sticky = tkinter.W)
-                self.name_entry.grid(row = 3, column = 2)
-
-                self.surname_label = tkinter.Label(self.parent, text = self.patient.surname)
-                self.surname_entry = tkinter.Entry(self.parent)
-                self.surname_podaci = tkinter.Label(self.parent, text = "Prezime:")
-                self.surname_podaci.grid(row = 4, column = 0, sticky = tkinter.W)
-                self.surname_label.grid(row = 4, column = 1, sticky = tkinter.W)
-                self.surname_entry.grid(row = 4, column = 2)
-
-                self.date_of_birth_label = tkinter.Label(self.parent, text = self.patient.date_of_birth)
-                self.date_of_birth_podaci = tkinter.Label(self.parent, text = "Datum rodjenja:")
-                self.date_of_birth_podaci.grid(row = 5, column = 0, sticky = tkinter.W)
-                self.date_of_birth_label.grid(row = 5, column = 1, sticky = tkinter.W)
-                self.date_Button = ttk.Button(self.parent, text='Izaberi',command=self.calCal)
-                self.date_Button.grid(row = 5, column = 3)
-
-                self.submit_button = tkinter.Button(self.parent, text = "Potvrdi", command = self.check)
-                self.submit_button.grid(row = 3, column = 4, sticky = tkinter.W)
-                self.exit_button = tkinter.Button(self.parent, text = "Nazad", command = self.goBack)
-                self.exit_button.grid(row = 4, column = 4)
-
-        def check(self):
-                tmpName = self.name_entry.get()
-                tmpSurname = self.surname_entry.get()
-                try :
-                    self.date
-                    tmpDate_of_birth = self.date.cget("text")
-                except:
-                    tmpDate_of_birth = self.patient.date_of_birth
-                print(tmpName,tmpSurname,tmpDate_of_birth)
-                if not tmpName:
-                        tmpName = self.patient.name
-                if not tmpSurname:
-                        tmpSurname = self.patient.surname
-
-                patiente = Patient.xmlToList()
-                del patiente[int(self.patient.LBO)]
-                Patient.saveXML(patiente)
-                newPatient = Patient(self.patient.LBO, tmpName, tmpSurname, tmpDate_of_birth)
-                Patient.addNewPatient(newPatient)
-                messagebox.showinfo("Uspeh", "Uspesno ste izmenili")
-                self.goBack()
+    def initialize_insert_interface(self):
+        self.parent.title("Canvas Test")
+        self.parent.grid_rowconfigure(0,weight=1)
+        self.parent.grid_columnconfigure(0,weight=1)
+        self.parent.config(background="lavender")
 
 
-        def calCal(self):
-                child = tkinter.Toplevel()
-                cal = Calendar(child, Change, self)
+        self.Current_label = tkinter.Label(self.parent, text = "Trenutne vrednosti:")
+        self.Current_label.grid(row = 1, column = 1, sticky = tkinter.W)
 
-        def fillDate(self):
-                if self.data == {}:
-                    return
-                self.date = tkinter.Label(self.parent, text=str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected']))
-                self.date.grid(row = 5, column = 2)
+        self.New_label = tkinter.Label(self.parent, text = "Nove/izmenjene vrednosti:")
+        self.New_label.grid(row = 1, column = 2, sticky = tkinter.W)
 
-        def setDate(self,data):
-                self.data = data
-                self.fillDate()
+        self.LBO_label = tkinter.Label(self.parent, text = self.patient.LBO)
+        self.LBO_podaci = tkinter.Label(self.parent, text = "LBO:")
+        self.LBO_podaci.grid(row = 2, column = 0, sticky = tkinter.W)
+        self.LBO_label.grid(row = 2, column = 1, sticky = tkinter.W)
+
+        self.name_label = tkinter.Label(self.parent, text = self.patient.name)
+        self.name_entry = tkinter.Entry(self.parent)
+        self.name_podaci = tkinter.Label(self.parent, text = "Ime:")
+        self.name_podaci.grid(row = 3, column = 0, sticky = tkinter.W)
+        self.name_label.grid(row = 3, column = 1, sticky = tkinter.W)
+        self.name_entry.grid(row = 3, column = 2)
+
+        self.surname_label = tkinter.Label(self.parent, text = self.patient.surname)
+        self.surname_entry = tkinter.Entry(self.parent)
+        self.surname_podaci = tkinter.Label(self.parent, text = "Prezime:")
+        self.surname_podaci.grid(row = 4, column = 0, sticky = tkinter.W)
+        self.surname_label.grid(row = 4, column = 1, sticky = tkinter.W)
+        self.surname_entry.grid(row = 4, column = 2)
+
+        self.date_of_birth_label = tkinter.Label(self.parent, text = self.patient.date_of_birth)
+        self.date_of_birth_podaci = tkinter.Label(self.parent, text = "Datum rodjenja:")
+        self.date_of_birth_podaci.grid(row = 5, column = 0, sticky = tkinter.W)
+        self.date_of_birth_label.grid(row = 5, column = 1, sticky = tkinter.W)
+        self.date_Button = ttk.Button(self.parent, text='Izaberi',command=self.calCal)
+        self.date_Button.grid(row = 5, column = 3)
+
+        self.submit_button = tkinter.Button(self.parent, text = "Potvrdi", command = self.check)
+        self.submit_button.grid(row = 3, column = 4, sticky = tkinter.W)
+        self.exit_button = tkinter.Button(self.parent, text = "Nazad", command = self.goBack)
+        self.exit_button.grid(row = 4, column = 4)
+
+    def check(self):
+        tmpName = self.name_entry.get()
+        tmpSurname = self.surname_entry.get()
+        try :
+            self.date
+            tmpDate_of_birth = self.date.cget("text")
+        except:
+            tmpDate_of_birth = self.patient.date_of_birth
+        print(tmpName,tmpSurname,tmpDate_of_birth)
+        if not tmpName:
+                tmpName = self.patient.name
+        if not tmpSurname:
+                tmpSurname = self.patient.surname
+
+        patiente = Patient.xmlToList()
+        del patiente[int(self.patient.LBO)]
+        Patient.saveXML(patiente)
+        newPatient = Patient(self.patient.LBO, tmpName, tmpSurname, tmpDate_of_birth)
+        Patient.addNewPatient(newPatient)
+        messagebox.showinfo("Uspeh", "Uspesno ste izmenili")
+        self.goBack()
 
 
-        def goBack(self):
-                self.parent.withdraw()
-                self.newWindow = tkinter.Toplevel(self.parent)
-                bb = self.otac(self.newWindow)
+    def calCal(self):
+        child = tkinter.Toplevel()
+        cal = Calendar(child, Change, self)
+
+    def fillDate(self):
+        if self.data == {}:
+            return
+        self.date = tkinter.Label(self.parent, text=str(self.data['year_selected'])+"-"+str(self.data['month_selected'])+"-"+str(self.data['day_selected']))
+        self.date.grid(row = 5, column = 2)
+
+    def setDate(self,data):
+        self.data = data
+        self.fillDate()
+
+
+    def goBack(self):
+        self.parent.withdraw()
+        self.newWindow = tkinter.Toplevel(self.parent)
+        bb = self.otac(self.newWindow)
 
 
 class Calendar:

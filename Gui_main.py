@@ -7,7 +7,7 @@ from Pregledi import Pregledi
 from tkinter import messagebox
 
 class Main(tkinter.Frame):
-    
+
     def __init__(self, parent):
         self.patiente = []
         self.patienteKeys=[]
@@ -17,6 +17,15 @@ class Main(tkinter.Frame):
         self.initialize_user_interface()
 
     def initialize_user_interface(self):
+
+        #kod za centriranje 
+        self.parent.withdraw()
+        self.parent.update_idletasks()  # Update "requested size" from geometry manager
+        x = (self.parent.winfo_screenwidth() - self.parent.winfo_reqwidth()) / 2
+        y = (self.parent.winfo_screenheight() - self.parent.winfo_reqheight()) / 2
+        self.parent.geometry("+%d+%d" % (x, y))
+        self.parent.deiconify()
+
         self.patiente = Patient.readXML() # zbog update
         self.parent.title("Canvas Test")
         self.parent.grid_rowconfigure(0,weight=1)
@@ -57,7 +66,7 @@ class Main(tkinter.Frame):
         bb = Change(self.newWindow, Main, patient)
 
     def insert_data(self):
-        
+
         for patientElement in self.patiente:
             self.patienteKeys.append(patientElement.LBO)
             self.tree.insert('', '0', values=(patientElement.surname,patientElement.name,patientElement.LBO))
@@ -115,6 +124,11 @@ def main():
     root=tkinter.Tk()
     d=Main(root)
     root.mainloop()
-
+    w = root.winfo_screenwidth()
+    h = root.winfo_screenheight()
+    size = tuple(int(pos) for pos in root.geometry().split('+')[0].split('x'))
+    x = w/2 - size[0]/2
+    y = h/2 - size[1]/2
+    root.geometry("%dx%d+%d+%d" % (size + (x, y)))
 if __name__=="__main__":
     main()

@@ -17,15 +17,30 @@ from datetime import date
 class AddNew(tkinter.Frame):
 
 	def __init__(self, parent, otac, patienteKeys):
+		self.parent=parent
+		
+		#kod za centriranje
+		self.parent.withdraw()
+		self.parent.update_idletasks()  # Update "requested size" from geometry manager
+		x = (self.parent.winfo_screenwidth() - self.parent.winfo_reqwidth()) / 2
+		y = (self.parent.winfo_screenheight() - self.parent.winfo_reqheight()) / 2
+		self.parent.geometry("+%d+%d" % (x, y))
+		self.parent.deiconify()
 
 		self.patienteKeys = patienteKeys
 		self.otac = otac
-		self.parent=parent
 		self.data = {}
 		self.frame = tkinter.Frame(self.parent)
 		self.initialize_insert_interface()
 
 	def initialize_insert_interface(self):
+
+		self.patiente = Patient.readXML() # zbog update
+		self.parent.title("Canvas Test")
+		self.parent.grid_rowconfigure(0,weight=1)
+		self.parent.grid_columnconfigure(0,weight=1)
+		self.parent.config(background="lavender")
+
 		self.v = ''
 		self.parent.title("Canvas Test")
 		self.parent.grid_rowconfigure(0,weight=1)
@@ -103,6 +118,23 @@ class AddNew(tkinter.Frame):
 class DodajPregled(tkinter.Frame):
 
 	def __init__(self, parent,otac, patient, first, second): #first i second sluze samo da bi se vratio na prosli nivo
+		self.parent = parent
+
+		#kod za centriranje
+		self.parent.withdraw()
+		self.parent.update_idletasks()  # Update "requested size" from geometry manager
+		x = (self.parent.winfo_screenwidth() - self.parent.winfo_reqwidth()) / 2
+		y = (self.parent.winfo_screenheight() - self.parent.winfo_reqheight()) / 2
+		self.parent.geometry("+%d+%d" % (x, y))
+		self.parent.deiconify()
+
+		self.patiente = Patient.readXML() # zbog update
+		self.parent.title("Canvas Test")
+		self.parent.grid_rowconfigure(0,weight=1)
+		self.parent.grid_columnconfigure(0,weight=1)
+		self.parent.config(background="lavender")
+
+
 		self.route = ""
 		self.first = first
 		self.second = second
@@ -110,7 +142,6 @@ class DodajPregled(tkinter.Frame):
 		self.patientKey = self.patient.LBO
 		self.otac = otac
 		self.data = {}
-		self.parent = parent
 		self.id = str(uuid.uuid4().int & (1<<32)-1)
 		self.frame = tkinter.Frame(self.parent)
 		self.initialize_insert_interface()
@@ -234,6 +265,23 @@ class DodajPregled(tkinter.Frame):
 
 class Calendar:
 	def __init__(self, parent,otac,selfP, dic = 0):
+
+		#kod za centriranje
+		self.parent.withdraw()
+		self.parent.update_idletasks()  # Update "requested size" from geometry manager
+		x = (self.parent.winfo_screenwidth() - self.parent.winfo_reqwidth()) / 2
+		y = (self.parent.winfo_screenheight() - self.parent.winfo_reqheight()) / 2
+		self.parent.geometry("+%d+%d" % (x, y))
+		self.parent.deiconify()
+
+		self.patiente = Patient.readXML() # zbog update
+		self.parent.title("Canvas Test")
+		self.parent.grid_rowconfigure(0,weight=1)
+		self.parent.grid_columnconfigure(0,weight=1)
+		self.parent.config(background="lavender")
+
+
+
 		self.dic = dic
 		self.values = {}
 		self.selfP = selfP
@@ -361,9 +409,26 @@ class Calendar:
 class Dicom(tkinter.Frame):
 
 	def __init__(self, parent, otac, path, patient, med = False):
+		self.parent = parent
+
+		#kod za centriranje
+		self.parent.withdraw()
+		self.parent.update_idletasks()  # Update "requested size" from geometry manager
+		x = (self.parent.winfo_screenwidth() - self.parent.winfo_reqwidth()) / 2
+		y = (self.parent.winfo_screenheight() - self.parent.winfo_reqheight()) / 2
+		self.parent.geometry("+%d+%d" % (x, y))
+		self.parent.deiconify()
+
+		self.patiente = Patient.readXML() # zbog update
+		self.parent.title("Canvas Test")
+		self.parent.grid_rowconfigure(0,weight=1)
+		self.parent.grid_columnconfigure(0,weight=1)
+		self.parent.config(background="lavender")
+
+
+
 		self.med = med
 		self.patient = patient
-		self.parent = parent
 		self.otac = otac
 		self.path = path
 

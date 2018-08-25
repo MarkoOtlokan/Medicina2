@@ -11,11 +11,20 @@ from AddNew import Dicom
 class ChangeMed(tkinter.Frame):
 
     def __init__(self, parent, otac, med, pat,ot):
+        self.parent=parent
+
+        self.parent.withdraw()
+        self.parent.update_idletasks()  # Update "requested size" from geometry manager
+        x = (self.parent.winfo_screenwidth() - self.parent.winfo_reqwidth()) / 2
+        y = (self.parent.winfo_screenheight() - self.parent.winfo_reqheight()) / 2
+        self.parent.geometry("+%d+%d" % (x, y))
+        self.parent.deiconify()
+
+
         self.ot = ot
         self.med = med
         self.pat = pat
         self.otac = otac
-        self.parent=parent
         self.patient = pat
         self.frame = tkinter.Frame(self.parent)
         self.initialize_insert_interface()

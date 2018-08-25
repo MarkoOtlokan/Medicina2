@@ -11,9 +11,16 @@ class Pregledi(tkinter.Frame):
 
 	def __init__(self, parent, otac, patient):
 		self.patient = patient
+		self.parent=parent
+
+		self.parent.withdraw()
+		self.parent.update_idletasks()  # Update "requested size" from geometry manager
+		x = (self.parent.winfo_screenwidth() - self.parent.winfo_reqwidth()) / 2
+		y = (self.parent.winfo_screenheight() - self.parent.winfo_reqheight()) / 2
+		self.parent.geometry("+%d+%d" % (x, y))
+		self.parent.deiconify()
 
 		self.otac = otac
-		self.parent=parent
 		self.frame = tkinter.Frame(self.parent)
 		self.initialize_insert_interface()
 

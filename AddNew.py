@@ -18,7 +18,7 @@ class AddNew(tkinter.Frame):
 
 	def __init__(self, parent, otac, patienteKeys):
 		self.parent=parent
-		
+
 		#kod za centriranje
 		self.parent.withdraw()
 		self.parent.update_idletasks()  # Update "requested size" from geometry manager
@@ -247,9 +247,6 @@ class DodajPregled(tkinter.Frame):
 		self.dicom_entry.insert(tkinter.END,self.route)
 		self.goDic_button.configure(state=tkinter.NORMAL)
 
-	def calCal(self):
-		child = tkinter.Toplevel()
-		cal = Calendar(child,DodajPregled,self)
 
 	def fillDate(self):
 		if self.data == {}:
@@ -265,6 +262,7 @@ class DodajPregled(tkinter.Frame):
 
 class Calendar:
 	def __init__(self, parent,otac,selfP, dic = 0):
+		self.parent = parent
 
 		#kod za centriranje
 		self.parent.withdraw()
@@ -285,7 +283,6 @@ class Calendar:
 		self.dic = dic
 		self.values = {}
 		self.selfP = selfP
-		self.parent = parent
 		self.cal = calendar.TextCalendar(calendar.SUNDAY)
 		self.year = datetime.date.today().year
 		self.month = datetime.date.today().month
